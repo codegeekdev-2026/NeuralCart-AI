@@ -124,15 +124,51 @@ class PaymentResponse(BaseModel):
 # Cart Models
 class CartItem(BaseModel):
     product_id: str
-    quantity: int
-    price: float
+    product_name: Optional[str] = None
+    quantity: int = Field(ge=1)
+    price: float = Field(ge=0)
+    discount_percentage: Optional[float] = Field(default=0, ge=0, le=100)
+    total: Optional[float] = None
+    added_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+class CartAddRequest(BaseModel):
+    product_id: str
+    quantity: int = Field(default=1, ge=1)
+    price: Optional[float] = None
+
+
+class CartUpdateRequest(BaseModel):
+    quantity: int = Field(ge=1)
 
 
 class Cart(BaseModel):
     user_id: str
     items: List[CartItem] = []
-    total_price: float = 0.0
+    subtotal: float = Field(default=0.0, ge=0)
+    discount_amount: float = Field(default=0.0, ge=0)
+    total_price: float = Field(default=0.0, ge=0)
+    item_count: int = Field(default=0, ge=0)
+    coupon_code: Optional[str] = None
+    coupon_discount: Optional[float] = None
+    estimated_delivery: Optional[datetime] = None
     last_updated: datetime = Field(default_factory=datetime.utcnow)
+    abandoned: bool = False
+    abandoned_at: Optional[datetime] = None
+
+
+class CartResponse(BaseModel):
+    success: bool
+    cart: Optional[Cart] = None
+    message: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+
+class CartValidationResult(BaseModel):
+    valid: bool
+    errors: List[str] = []
+    warnings: List[str] = []
+    suggestions: List[str] = []
 
 
 # Agent Recommendation Models
