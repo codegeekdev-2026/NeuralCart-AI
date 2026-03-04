@@ -448,33 +448,33 @@ async def get_cart_items(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{user_id}/total", response_model=Dict[str, Any])
-async def get_cart_total(user_id: str = Path(..., description="User ID")):
-    """
-    Get cart total amount
+# @router.get("/{user_id}/total", response_model=Dict[str, Any])
+# async def get_cart_total(user_id: str = Path(..., description="User ID")):
+#     """
+#     Get cart total amount
     
-    Returns:
-        Cart total with breakdown
-    """
-    try:
-        total = await cart_service.get_cart_total(user_id)
-        cart = await cart_service.get_cart(user_id)
+#     Returns:
+#         Cart total with breakdown
+#     """
+#     try:
+#         total = await cart_service.get_cart_total(user_id)
+#         cart = await cart_service.get_cart(user_id)
         
-        if cart is None:
-            raise HTTPException(status_code=404, detail="Cart not found")
+#         if cart is None:
+#             raise HTTPException(status_code=404, detail="Cart not found")
         
-        return {
-            "success": True,
-            "user_id": user_id,
-            "subtotal": cart.subtotal or 0,
-            "discount": cart.discount_amount or 0,
-            "total": total,
-            "item_count": len(cart.items) if cart.items else 0,
-            "currency": "USD",
-            "timestamp": datetime.utcnow().isoformat()
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Error getting cart total: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+#         return {
+#             "success": True,
+#             "user_id": user_id,
+#             "subtotal": cart.subtotal or 0,
+#             "discount": cart.discount_amount or 0,
+#             "total": total,
+#             "item_count": len(cart.items) if cart.items else 0,
+#             "currency": "USD",
+#             "timestamp": datetime.utcnow().isoformat()
+#         }
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         logger.error(f"Error getting cart total: {e}")
+#         raise HTTPException(status_code=500, detail=str(e))
