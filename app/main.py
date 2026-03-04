@@ -11,7 +11,8 @@ from app.api import (
     recommendations_router,
     search_router,
     payments_router,
-    health_router
+    health_router,
+    cart_router
 )
 
 # Configure logging
@@ -57,6 +58,7 @@ app.include_router(health_router)
 app.include_router(recommendations_router)
 app.include_router(search_router)
 app.include_router(payments_router)
+app.include_router(cart_router)
 
 
 # Startup event
