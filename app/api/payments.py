@@ -106,29 +106,29 @@ async def get_payment_status(transaction_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/refund")
-async def refund_payment(
-    transaction_id: str,
-    amount: Optional[float] = None
-):
-    """
-    Refund a payment
+# @router.post("/refund")
+# async def refund_payment(
+#     transaction_id: str,
+#     amount: Optional[float] = None
+# ):
+#     """
+#     Refund a payment
     
-    Args:
-        transaction_id: Transaction ID to refund
-        amount: Refund amount (if partial)
+#     Args:
+#         transaction_id: Transaction ID to refund
+#         amount: Refund amount (if partial)
         
-    Returns:
-        Refund status
-    """
-    try:
-        # In production, call Stripe refund API
-        return {
-            "transaction_id": transaction_id,
-            "refund_amount": amount,
-            "status": "refunded"
-        }
+#     Returns:
+#         Refund status
+#     """
+#     try:
+#         # In production, call Stripe refund API
+#         return {
+#             "transaction_id": transaction_id,
+#             "refund_amount": amount,
+#             "status": "refunded"
+#         }
     
-    except Exception as e:
-        logger.error(f"Error refunding payment: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+#     except Exception as e:
+#         logger.error(f"Error refunding payment: {e}")
+#         raise HTTPException(status_code=400, detail=str(e))
