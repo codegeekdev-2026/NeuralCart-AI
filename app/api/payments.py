@@ -82,28 +82,28 @@ async def handle_payment_webhook(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/status/{transaction_id}")
-async def get_payment_status(transaction_id: str):
-    """
-    Get payment status
+# @router.get("/status/{transaction_id}")
+# async def get_payment_status(transaction_id: str):
+#     """
+#     Get payment status
     
-    Args:
-        transaction_id: Transaction ID
+#     Args:
+#         transaction_id: Transaction ID
         
-    Returns:
-        Payment status
-    """
-    try:
-        # In production, query actual payment status from Stripe
-        return {
-            "transaction_id": transaction_id,
-            "status": "completed",
-            "message": "Payment processed successfully"
-        }
+#     Returns:
+#         Payment status
+#     """
+#     try:
+#         # In production, query actual payment status from Stripe
+#         return {
+#             "transaction_id": transaction_id,
+#             "status": "completed",
+#             "message": "Payment processed successfully"
+#         }
     
-    except Exception as e:
-        logger.error(f"Error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+#     except Exception as e:
+#         logger.error(f"Error: {e}")
+#         raise HTTPException(status_code=500, detail=str(e))
 
 
 # @router.post("/refund")
