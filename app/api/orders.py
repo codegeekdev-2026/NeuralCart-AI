@@ -16,4 +16,3 @@ from app.services.order import order_service
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/orders", tags=["orders"])
-
