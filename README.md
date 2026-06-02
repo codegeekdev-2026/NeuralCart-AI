@@ -57,6 +57,7 @@ A complete, production-ready platform that combines OpenAI's powerful LLMs with 
 - **AI-Powered Recommendations**: Multi-agent system using OpenAI embeddings for intelligent product suggestions
 - **Semantic Search**: Hybrid keyword + vector search using FAISS/Pinecone for context-aware discovery
 - **Dynamic Pricing Agent**: Real-time price optimization based on demand, inventory, competitor pricing, and user segments
+- **Loyalty Promotion Engine**: Tier-aware rewards, loyalty point incentives, and personalized discount offers
 - **Real-time Search API**: FastAPI-based endpoints with ElasticSearch integration
 - **Payment Integration**: Stripe integration for secure payment processing
 - **Cart API Integration**: Seamless cart management and promotion application
