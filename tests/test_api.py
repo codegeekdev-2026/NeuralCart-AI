@@ -83,3 +83,50 @@ def test_payment_intent_creation():
     response = client.post("/api/v1/payments/intent", json=payload)
     # This will fail without Stripe API key but tests the endpoint
     assert response.status_code in [200, 400]
+
+
+def test_order_endpoints():
+    """Basic order management lifecycle"""
+    # create order
+    order_payload = {
+        "user_id": "test_user",
+        "items": [
+            {
+                "product_id": "prod_001",
+                "product_name": "Premium Laptop",
+                "quantity": 1,
+                "unit_price": 1299.99,
+                "total_price": 1299.99
+            }
+        ],
+        "total_amount": 1299.99,
+        "shipping_address": "123 Main St"
+    }
+
+    resp = client.post("/api/v1/orders", json=order_payload)
+    assert resp.status_code == 200
+    order_data = resp.json()
+    assert "order_id" in order_data
+    order_id = order_data["order_id"]
+    assert order_data["status"] == "pending"
+
+    # retrieve by id
+    resp2 = client.get(f"/api/v1/orders/{order_id}")
+    assert resp2.status_code == 200
+    assert resp2.json()["order_id"] == order_id
+
+    # list for user
+    resp3 = client.get("/api/v1/orders/user/test_user")
+    assert resp3.status_code == 200
+    assert isinstance(resp3.json(), list)
+    assert any(o["order_id"] == order_id for o in resp3.json())
+
+    # update status
+    resp4 = client.patch(f"/api/v1/orders/{order_id}/status", json={"status": "shipped"})
+    assert resp4.status_code == 200
+    assert resp4.json()["status"] == "shipped"
+
+    # cancel order
+    resp5 = client.delete(f"/api/v1/orders/{order_id}")
+    assert resp5.status_code == 200
+    assert resp5.json()["status"] == "canceled"

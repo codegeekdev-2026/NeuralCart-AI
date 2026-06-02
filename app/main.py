@@ -15,6 +15,7 @@ from app.api import (
     cart_router,
     orders_router,
 )
+from app.api.products import router as products_router
 
 # Configure logging
 logging.basicConfig(
@@ -61,15 +62,20 @@ app.include_router(search_router)
 app.include_router(payments_router)
 app.include_router(cart_router)
 app.include_router(orders_router)
+app.include_router(products_router)
 
 
 # Startup event
 @app.on_event("startup")
 async def startup_event():
+    from app.db import init_db
+
     logger.info("Starting E-commerce Personalization Platform API")
     logger.info(f"API Version: {settings.API_VERSION}")
     logger.info(f"Debug Mode: {settings.DEBUG}")
     logger.info(f"Vector DB Type: {settings.VECTOR_DB_TYPE}")
+
+    init_db()
 
 
 # Shutdown event

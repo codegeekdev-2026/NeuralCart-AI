@@ -1,0 +1,1 @@
+"""Deprecated script template, not used directly"""

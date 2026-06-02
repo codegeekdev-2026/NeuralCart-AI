@@ -37,3 +37,108 @@ async def create_payment_intent(request: PaymentRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.post("/process", response_model=PaymentResponse)
+async def process_payment(request: PaymentRequest):
+    """
+    Process a payment
+    
+    Args:
+        request: Payment request
+        
+    Returns:
+        Payment response
+    """
+    try:
+        # attach order_id to metadata if present
+        if request.order_id:
+            request.metadata = request.metadata or {}
+            request.metadata["order_id"] = request.order_id
+
+        response = payment_service.process_payment(request)
+        return response
+    
+    except Exception as e:
+        logger.error(f"Error processing payment: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/webhook")
+async def handle_payment_webhook(
+    request: Dict[str, Any],
+    stripe_signature: Optional[str] = Header(None)
+):
+    """
+    Handle Stripe webhook
+    
+    Args:
+        request: Webhook payload
+        stripe_signature: Stripe signature header
+        
+    Returns:
+        Success response
+    """
+    try:
+        if not stripe_signature:
+            raise HTTPException(status_code=400, detail="Missing signature")
+        
+        # Note: In production, get raw body from FastAPI request
+        # event = payment_service.verify_webhook(raw_body, stripe_signature)
+        # For now, just return success
+        
+        return {"received": True}
+    
+    except Exception as e:
+        logger.error(f"Error handling webhook: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+# @router.get("/status/{transaction_id}")
+# async def get_payment_status(transaction_id: str):
+#     """
+#     Get payment status
+    
+#     Args:
+#         transaction_id: Transaction ID
+        
+#     Returns:
+#         Payment status
+#     """
+#     try:
+#         # In production, query actual payment status from Stripe
+#         return {
+#             "transaction_id": transaction_id,
+#             "status": "completed",
+#             "message": "Payment processed successfully"
+#         }
+    
+#     except Exception as e:
+#         logger.error(f"Error: {e}")
+#         raise HTTPException(status_code=500, detail=str(e))
+
+
+# @router.post("/refund")
+# async def refund_payment(
+#     transaction_id: str,
+#     amount: Optional[float] = None
+# ):
+#     """
+#     Refund a payment
+    
+#     Args:
+#         transaction_id: Transaction ID to refund
+#         amount: Refund amount (if partial)
+        
+#     Returns:
+#         Refund status
+#     """
+#     try:
+#         # In production, call Stripe refund API
+#         return {
+#             "transaction_id": transaction_id,
+#             "refund_amount": amount,
+#             "status": "refunded"
+#         }
+    
+#     except Exception as e:
+#         logger.error(f"Error refunding payment: {e}")
+#         raise HTTPException(status_code=400, detail=str(e))
