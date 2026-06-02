@@ -43,13 +43,23 @@ class RecommendationAgent:
     
     def _get_product_catalog(self) -> List[Dict[str, Any]]:
         """Get current product catalog"""
-        # In production, this would fetch from database
-        return [
-            {'id': 'prod_001', 'name': 'Premium Laptop', 'category': 'Electronics', 'price': 1299.99},
-            {'id': 'prod_002', 'name': 'Wireless Mouse', 'category': 'Accessories', 'price': 49.99},
-            {'id': 'prod_003', 'name': 'USB-C Hub', 'category': 'Accessories', 'price': 79.99},
-            {'id': 'prod_004', 'name': 'Mechanical Keyboard', 'category': 'Accessories', 'price': 149.99},
-        ]
+        from app.db import SessionLocal
+        from app.repositories.product_repository import product_repository
+
+        with SessionLocal() as db:
+            products = product_repository.search(db, query="", filters={}, limit=100)
+            return [
+                {
+                    'id': p.id,
+                    'name': p.name,
+                    'category': p.category,
+                    'price': p.price,
+                    'description': p.description,
+                    'tags': p.tags,
+                    'inventory': p.inventory
+                }
+                for p in products
+            ]
     
     def _analyze_user_behavior(self, context: UserContext) -> Dict[str, Any]:
         """Analyze user behavior patterns"""
