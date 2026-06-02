@@ -146,7 +146,16 @@ class PaymentService:
         if event_type == 'payment_intent.succeeded':
             intent = event['data']['object']
             logger.info(f"Payment succeeded: {intent['id']}")
-            # Update order status in database
+            # Attempt to update linked order if metadata contains an order_id
+            order_id = intent.get('metadata', {}).get('order_id')
+            if order_id:
+                try:
+                    from app.services.order import order_service
+                    updated = order_service.update_order_status(order_id, 'paid')
+                    if updated:
+                        logger.info(f"Order {order_id} marked as paid via webhook")
+                except Exception as exc:  # avoid import-time circular issues
+                    logger.error(f"Failed to update order status for {order_id}: {exc}")
         
         elif event_type == 'payment_intent.payment_failed':
             intent = event['data']['object']

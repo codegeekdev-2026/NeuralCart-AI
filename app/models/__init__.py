@@ -15,6 +15,10 @@ from .schemas import (
     PaymentResponse,
     Cart,
     CartItem,
+    OrderItem,
+    OrderCreateRequest,
+    OrderStatusUpdate,
+    Order,
     AgentRecommendation,
     AgentThought,
     SearchRequest,
@@ -42,5 +46,9 @@ __all__ = [
     "AgentThought",
     "SearchRequest",
     "SearchResult",
+    "OrderItem",
+    "OrderCreateRequest",
+    "OrderStatusUpdate",
+    "Order",
     "HealthResponse"
 ]

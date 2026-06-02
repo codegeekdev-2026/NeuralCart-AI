@@ -112,6 +112,8 @@ class PaymentRequest(BaseModel):
     currency: str = "USD"
     items: List[Dict[str, Any]]
     metadata: Optional[Dict[str, Any]] = None
+    # include order ID if payment is for a specific order
+    order_id: Optional[str] = None
 
 
 class PaymentResponse(BaseModel):
@@ -196,6 +198,43 @@ class SearchResult(BaseModel):
     items: List[Dict[str, Any]]
     total_count: int
     search_time_ms: float
+
+
+# Order Models
+class OrderItem(BaseModel):
+    product_id: str
+    product_name: Optional[str] = None
+    quantity: int = Field(ge=1)
+    unit_price: float = Field(ge=0)
+    total_price: float = Field(ge=0)
+
+    class Config:
+        orm_mode = True
+
+
+class OrderCreateRequest(BaseModel):
+    user_id: str
+    items: List[OrderItem]
+    total_amount: float = Field(ge=0)
+    shipping_address: Optional[str] = None
+
+
+class OrderStatusUpdate(BaseModel):
+    status: str
+
+
+class Order(BaseModel):
+    order_id: str
+    user_id: str
+    items: List[OrderItem]
+    total_amount: float
+    status: str
+    shipping_address: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+    class Config:
+        orm_mode = True
 
 
 # Health Check Models
