@@ -1,4 +1,4 @@
-# 🚀 AI-Powered E-commerce Personalization Platform
+# AI-Powered E-commerce Personalization Platform
 
 <div align="center">
 
@@ -28,6 +28,7 @@ A complete, production-ready platform that combines OpenAI's powerful LLMs with 
 - 🔍 **Hybrid Semantic Search** - Keyword + vector search using OpenAI embeddings and FAISS/Pinecone
 - 💰 **Dynamic Pricing** - Market-aware price optimization based on demand, inventory, and competitor pricing
 - 💳 **Secure Payments** - Stripe integration with webhook handling and refund processing
+- 🧾 **Order Management** - Create orders, track status, cancel or update orders
 - ☁️ **Cloud Native** - AWS Lambda, ECS, API Gateway, and S3 support for serverless deployment
 - ⚡ **High Performance** - Async FastAPI with 200-500ms recommendation generation
 - 📦 **Production Ready** - Comprehensive error handling, logging, health checks, and monitoring
@@ -178,6 +179,27 @@ Content-Type: application/json
 }
 ```
 
+### Orders API
+**Create Order**
+```bash
+POST /api/v1/orders
+Content-Type: application/json
+
+{
+  "user_id": "user_123",
+  "items": [
+    {
+      "product_id": "prod_001",
+      "product_name": "Premium Laptop",
+      "quantity": 1,
+      "unit_price": 1299.99,
+      "total_price": 1299.99
+    }
+  ],
+  "total_amount": 1299.99,
+  "shipping_address": "123 Main St"
+}
+```
 For detailed API documentation, see [API_REFERENCE.md](./API_REFERENCE.md)
 
 ---

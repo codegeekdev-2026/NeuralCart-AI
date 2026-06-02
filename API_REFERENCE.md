@@ -167,6 +167,76 @@ GET /api/v1/recommendations/user/{user_id}?num_recommendations=5&session_id=sess
 
 ---
 
+### Orders API
+
+#### Create Order
+```http
+POST /api/v1/orders
+Content-Type: application/json
+
+{
+  "user_id": "user_123",
+  "items": [
+    {
+      "product_id": "prod_001",
+      "product_name": "Premium Laptop",
+      "quantity": 1,
+      "unit_price": 1299.99,
+      "total_price": 1299.99
+    }
+  ],
+  "total_amount": 1299.99,
+  "shipping_address": "123 Main St, Anytown, USA"
+}
+```
+
+**Response 200:**
+```json
+{
+  "order_id": "order_ab12cd34",
+  "user_id": "user_123",
+  "items": [...],
+  "total_amount": 1299.99,
+  "status": "pending",
+  "shipping_address": "123 Main St, Anytown, USA",
+  "created_at": "2025-03-06T12:00:00",
+  "updated_at": "2025-03-06T12:00:00"
+}
+```
+
+#### Get Order by ID
+```http
+GET /api/v1/orders/{order_id}
+```
+
+Returns the order details for the specified order_id.
+
+#### List Orders for User
+```http
+GET /api/v1/orders/user/{user_id}
+```
+
+Returns all orders placed by the user.
+
+#### Update Order Status
+```http
+PATCH /api/v1/orders/{order_id}/status
+Content-Type: application/json
+
+{
+  "status": "shipped"
+}
+```
+
+#### Cancel Order
+```http
+DELETE /api/v1/orders/{order_id}
+```
+
+Marks the order status as `canceled`.
+
+---
+
 ### Search API
 
 #### Search Products
