@@ -5,7 +5,6 @@ Provides endpoints for cart management including:
 - Get, create, update, delete cart operations
 - Item management (add, remove, update quantity)
 - Cart validation and summaries
-- Promotion and coupon application
 - Cart merging and delivery estimation
 """
 
